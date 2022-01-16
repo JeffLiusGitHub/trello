@@ -1,29 +1,30 @@
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import formatDate from "./Component/FormatDate";
+import Header from "./Component/Header";
 import Button from "@mui/material/Button";
 import ModalComponent from "./Component/ModalComponent";
-
-import Box from '@mui/material/Box';
-
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import Card from "./Component/CardComponent";
+//
+// import { useDispatch } from "react-redux";
+// import { cardActions } from "./store/card-slice";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
 const itemsFromBackend = [
-  { id: uuidv4(), title: "1 task", content: "First task" },
-  { id: uuidv4(), title: "2 task", content: "Second task" },
+  { id: uuidv4(), title: "1 task", content: "First task", date: new Date() },
+  { id: uuidv4(), title: "2 task", content: "Second task", date: new Date() },
 ];
 
 const columnFromBackend = {
@@ -35,21 +36,13 @@ const columnFromBackend = {
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
   const { source, destination } = result;
-  // console.log(result);
   if (source.droppableId !== destination.droppableId) {
     const sourceColumn = columns[source.droppableId];
-    // console.log({ sourceColumn });
     const SourceCopiedItems = [...sourceColumn.items];
-    // console.log(SourceCopiedItems);
     const [SourceRemoved] = SourceCopiedItems.splice(source.index, 1);
-    // console.log(SourceRemoved);
-    // console.log(SourceCopiedItems);
     const destColumn = columns[destination.droppableId];
-    // console.log({ destColumn });
     const destCopiedItems = [...destColumn.items];
-    // console.log({ destCopiedItems });
     destCopiedItems.splice(destination.index, 0, SourceRemoved);
-    // console.log({ destCopiedItems });
     setColumns({
       ...columns,
       [source.droppableId]: {
@@ -62,16 +55,11 @@ const onDragEnd = (result, columns, setColumns) => {
       },
     });
   } else {
-    // console.log(columns);
     const column = columns[source.droppableId];
-    // console.log(column);
     const copiedItems = [...column.items];
     console.log(copiedItems);
     const [removed] = copiedItems.splice(source.index, 1);
-    // console.log(removed);
     copiedItems.splice(destination.index, 0, removed);
-
-    // console.log(column);
     setColumns({
       ...columns,
       [source.droppableId]: {
@@ -79,19 +67,32 @@ const onDragEnd = (result, columns, setColumns) => {
         items: copiedItems,
       },
     });
-    // console.log(columns);
   }
 };
 
 function App() {
   const [columns, setColumns] = useState(columnFromBackend);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [contents, setContents] = useState("");
   const [open, setOpen] = useState(false);
+  const [currentId, setCurrentId] = useState();
+  const [currentColumn, setCurrentColumn] = useState();
+  const [date, setDate] = useState(new Date());
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+    // setCurrentColumn(column);
+    // setCurrentId(id);
+  };
   const handleClose = () => setOpen(false);
-
+  // const titleInputEvent = event => {
+  //   setTitle(event.target.value);
+  // };
+  // const contentInputEvent = event => {
+  //   setContent(event.target.value);
+  // };
   const addNewTask = (column, id) => {
-
     column.items.push({
       id: uuidv4(),
       title: "7 task",
@@ -103,101 +104,139 @@ function App() {
         ...column,
       },
     });
-    console.log(columns);
+
+    console.log(column);
   };
+
+  const addNewTaskToUnSchedule = () => {
+    let unScheduledId, unScheduledColumn;
+    [unScheduledId, unScheduledColumn] = Object.entries(columns)[0];
+    unScheduledColumn.items.push({
+      id: uuidv4(),
+      title: title,
+      content: contents,
+      date: date,
+    });
+    console.log(unScheduledColumn);
+    setColumns({
+      ...columns,
+      [unScheduledId]: {
+        ...unScheduledColumn,
+      },
+    });
+  };
+
+  console.log({ title, contents, date });
+  console.log(columns);
   return (
-    <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
-      <DragDropContext
-        onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+    <>
+      <ModalComponent
+        open={open}
+        handleClose={handleClose}
+        date={date}
+        setDate={setDate}
+        title={title}
+        setTitle={setTitle}
+        contents={setContents}
+        setContents={setContents}
+        addNewTaskToUnSchedule={addNewTaskToUnSchedule}
+        // titleInputEvent={titleInputEvent}
+        // contentInputEvent={contentInputEvent}
+      ></ModalComponent>
+      <Header handleOpen={() => handleOpen()} />
+      <div
+        style={{ display: "flex", justifyContent: "center", height: "100%" }}
       >
-        {Object.entries(columns).map(([id, column]) => {
-          return (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-              }}
-            >
+        <DragDropContext
+          onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+        >
+          {Object.entries(columns).map(([id, column]) => {
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <h2>
+                  {column.name}
 
-                <ModalComponent
-                open={open}
-                handleClose={handleClose}
-                addNewTask={addNewTask.bind(null,column, id)}
-                column = {column}
-               
-                id={id}
-              ></ModalComponent>
-              <h2>
-                {column.name}
-                <Button onClick={handleOpen} variant="contained">
-                  add new task
-                </Button>
-              </h2>
-  
+                  {/* <Button onClick={() => handleOpen()} variant="contained">
+                    add new task
+                  </Button> */}
+                </h2>
 
-            
-              <div style={{ margin: "8px" }}>
-                <Droppable droppableId={id} key={id}>
-                  {(provided, snapshot) => {
-                    return (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={{
-                          background: snapshot.isDraggingOver
-                            ? "lightblue"
-                            : "lightgrey",
-                          padding: 4,
-                          width: 250,
-                          minHeight: 500,
-                        }}
-                      >
-                        {column.items.map((item, index) => {
-                          return (
-                            <Draggable
-                              key={item.id}
-                              draggableId={item.id}
-                              index={index}
-                            >
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    key={item.id}
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      userSelect: "none",
-                                      padding: 16,
-                                      margin: "0 0 8px 0",
-                                      minHeight: "50px",
-                                      backgroundColor: snapshot.isDragging
-                                        ? "#263B4A"
-                                        : "#456C86",
-                                      color: "white",
-                                      ...provided.draggableProps.style,
-                                    }}
-                                  >
-                                    {item.content}
-                                    <p>{item.title}</p>
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          );
-                        })}
-                        {provided.placeholder}
-                      </div>
-                    );
-                  }}
-                </Droppable>
+                <div style={{ margin: "8px" }}>
+                  <Droppable droppableId={id} key={id}>
+                    {(provided, snapshot) => {
+                      return (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          style={{
+                            background: snapshot.isDraggingOver
+                              ? "#1c78c362"
+                              : "#39a8db72",
+                            padding: 4,
+                            width: 250,
+                            minHeight: 500,
+                          }}
+                        >
+                          {column.items.map((item, index) => {
+                            return (
+                              <Draggable
+                                key={item.id}
+                                draggableId={item.id}
+                                index={index}
+                              >
+                                {(provided, snapshot) => {
+                                  return (
+                                    <div
+                                      key={item.id}
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      style={{
+                                        userSelect: "none",
+                                        padding: 8,
+                                        margin: "0 0 4px 0",
+                                        minHeight: "50px",
+                                        backgroundColor: snapshot.isDragging
+                                          ? "#ac8cb133"
+                                          : "#a9a9a933",
+                                        color: "white",
+                                        ...provided.draggableProps.style,
+                                      }}
+                                    >
+                                      <Card
+                                        title={item.title}
+                                        date={formatDate(item.date)}
+                                        content={item.content}
+                                        id={item.id}
+                                        
+                                      />
+                                      {/* Title: {item.title}
+                                      <p> Content: {item.content}</p>
+                                      <p>Deadline: {formatDate(item.date)}</p> */}
+                                    </div>
+                                  );
+                                }}
+                              </Draggable>
+                            );
+                          })}
+                          {provided.placeholder}
+                        </div>
+                      );
+                    }}
+                  </Droppable>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </DragDropContext>
-    </div>
+            );
+          })}
+        </DragDropContext>
+      </div>
+    </>
   );
 }
 
