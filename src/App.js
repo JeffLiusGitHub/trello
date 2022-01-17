@@ -6,6 +6,7 @@ import Header from "./Component/Header";
 import Button from "@mui/material/Button";
 import ModalComponent from "./Component/ModalComponent";
 import Card from "./Component/CardComponent";
+import ModalEdit from "./Component/ModalEdit";
 //
 // import { useDispatch } from "react-redux";
 // import { cardActions } from "./store/card-slice";
@@ -25,6 +26,8 @@ const style = {
 const itemsFromBackend = [
   { id: uuidv4(), title: "1 task", content: "First task", date: new Date() },
   { id: uuidv4(), title: "2 task", content: "Second task", date: new Date() },
+  { id: uuidv4(), title: "3 task", content: "third task", date: new Date() },
+  { id: uuidv4(), title: "4 task", content: "fourth task", date: new Date() },
 ];
 
 const columnFromBackend = {
@@ -76,36 +79,48 @@ function App() {
   const [content, setContent] = useState("");
   const [contents, setContents] = useState("");
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [currentId, setCurrentId] = useState();
-  const [currentColumn, setCurrentColumn] = useState();
+  const [index,setIndex] = useState();
+  const[columnId,setColumnId]=useState();
+  const [currentColumn, setCurrentColumn] = useState({});
   const [date, setDate] = useState(new Date());
 
   const handleOpen = () => {
     setOpen(true);
-    // setCurrentColumn(column);
-    // setCurrentId(id);
   };
-  const handleClose = () => setOpen(false);
-  // const titleInputEvent = event => {
-  //   setTitle(event.target.value);
-  // };
-  // const contentInputEvent = event => {
-  //   setContent(event.target.value);
-  // };
-  const addNewTask = (column, id) => {
-    column.items.push({
-      id: uuidv4(),
-      title: "7 task",
-      content: "fourth task",
-    });
-    setColumns({
-      ...columns,
-      [id]: {
-        ...column,
-      },
-    });
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleEditOpen = (index,columnId) => {
+    setIndex(index);
+    setColumnId(columnId);
+    setEditOpen(true);
+  };
+  const handleEditClose = () => {
+    setEditOpen(false);
+  };
+  const editCurrentTask = (index,columnId)=>{
+    const { [columnId]: columnValue } = columns;
+    const { name, items } = columnValue;
+    items[index]={
+      title: title,
+      content: contents,
+      date: date,
+    }
+    let newColumns = { ...columns };
+    newColumns[columnId] = { name: name, items: items };
+    setColumns(newColumns);
+    handleEditClose()
+  }
 
-    console.log(column);
+  const deleteCurrentTask = (index, columnId) => {
+    const { [columnId]: columnValue } = columns;
+    const { name, items } = columnValue;
+    items.splice(index, 1);
+    let newColumns = { ...columns };
+    newColumns[columnId] = { name: name, items: items };
+    setColumns(newColumns);
   };
 
   const addNewTaskToUnSchedule = () => {
@@ -124,10 +139,11 @@ function App() {
         ...unScheduledColumn,
       },
     });
+    handleClose()
   };
 
-  console.log({ title, contents, date });
-  console.log(columns);
+  // console.log({ title, contents, date });
+  // console.log(columns);
   return (
     <>
       <ModalComponent
@@ -140,9 +156,19 @@ function App() {
         contents={setContents}
         setContents={setContents}
         addNewTaskToUnSchedule={addNewTaskToUnSchedule}
-        // titleInputEvent={titleInputEvent}
-        // contentInputEvent={contentInputEvent}
       ></ModalComponent>
+
+<ModalEdit
+        open={editOpen}
+        handleClose={handleEditClose}
+        date={date}
+        setDate={setDate}
+        title={title}
+        setTitle={setTitle}
+        contents={setContents}
+        setContents={setContents}
+        editCurrentTask={()=>editCurrentTask(index,columnId)}
+      ></ModalEdit>
       <Header handleOpen={() => handleOpen()} />
       <div
         style={{ display: "flex", justifyContent: "center", height: "100%" }}
@@ -162,7 +188,7 @@ function App() {
                 <h2>
                   {column.name}
 
-                  {/* <Button onClick={() => handleOpen()} variant="contained">
+                  {/* <Button onClick={() => deleteCurrentTask()} variant="contained">
                     add new task
                   </Button> */}
                 </h2>
@@ -178,17 +204,22 @@ function App() {
                             background: snapshot.isDraggingOver
                               ? "#1c78c362"
                               : "#39a8db72",
-                            padding: 4,
-                            width: 250,
+                            padding: 8,
+                            margin: 3,
+                            width: "18vw",
                             minHeight: 500,
+                            height: "50vh",
+                            overflow: "scroll",
                           }}
                         >
+                          {/* {id} */}
                           {column.items.map((item, index) => {
                             return (
                               <Draggable
                                 key={item.id}
                                 draggableId={item.id}
                                 index={index}
+                                id={id}
                               >
                                 {(provided, snapshot) => {
                                   return (
@@ -214,7 +245,10 @@ function App() {
                                         date={formatDate(item.date)}
                                         content={item.content}
                                         id={item.id}
-                                        
+                                        index={index}
+                                        columnId={id}
+                                        deleteCurrentTask={deleteCurrentTask}
+                                        handleEditOpen={handleEditOpen}
                                       />
                                       {/* Title: {item.title}
                                       <p> Content: {item.content}</p>

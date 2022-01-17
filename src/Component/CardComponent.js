@@ -15,10 +15,10 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { light } from "@mui/material/styles/createPalette";
-import image from '../image/avatar.jpg'
+import image from "../image/avatar.jpg";
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -30,7 +30,16 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const CardComponent = ({ title, content, date }) => {
+const CardComponent = ({
+  title,
+  content,
+  date,
+  id,
+  index,
+  columnId,
+  deleteCurrentTask,
+  handleEditOpen,
+}) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
@@ -38,11 +47,9 @@ const CardComponent = ({ title, content, date }) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 445 }}>
       <CardHeader
-        avatar={
-          <Avatar alt='cool designer Jeff' src={image}/>      
-        }
+        avatar={<Avatar alt="cool designer Jeff" src={image} />}
         title={title}
         subheader={date}
       />
@@ -52,13 +59,19 @@ const CardComponent = ({ title, content, date }) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="Delete card">
+        <IconButton
+          aria-label="Delete card"
+          onClick={(event) => deleteCurrentTask(index, columnId)}
+        >
           <DeleteIcon />
         </IconButton>
-        <IconButton aria-label="Edit">
+        <IconButton
+          aria-label="Edit"
+          onClick={(event) => handleEditOpen(index, columnId)}
+        >
           <EditIcon />
         </IconButton>
-        </CardActions>
+      </CardActions>
     </Card>
   );
 };
