@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -15,13 +16,14 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  border: "2px solid rgba(61, 61, 237, 0.249)",
   boxShadow: 24,
+  borderRadius:'5px',
   p: 4,
 };
 const ModalEdit = ({
   open,
-  handleClose,
+  handleEditClose,
   editCurrentTask,
   date,
   setDate,
@@ -29,48 +31,52 @@ const ModalEdit = ({
   setTitle,
   contents,
   setContents,
+   titleIsInvalid,
+  contentIsInvalid,
+ 
 }) => {
-  // console.log({column},{id})
+
+
   return (
     <Modal
       open={open}
-      onClose={handleClose}
+      onClose={handleEditClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
+        <Typography id="modal-modal-title" variant="h4" component="h2">
           Edit the exist card
         </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        <Typography id="modal-modal-description" sx={{ mt: 2 ,mb:2}}>
           please modify title content and deadline of the card
         </Typography>
         <Stack spacing={3}>
           <TextField
             id="outlined-required"
+            required='true'
             label="Title"
             size="normal"
+            error={titleIsInvalid}            
+            helperText={titleIsInvalid?"title cannot be empty":null}
+            
             value={title}
             onChange={(event) => setTitle(event.target.value)}
           />
 
-          {/* <TextField
-            id="outlined-required"
-            label="test"
-            multiline
-            rows={5}
-            size="normal"
-            value={contents}
-            onChange={(event) => setContents(event.target.value)}
-          /> */}
+
           <TextField
             id="outlined-required"
+            required='true'
             label="Content"
             multiline
             rows={5}
             size="normal"
-            // value={contents}
-            onChange={(event) => setContents(event.target.value)}
+            placeholder='set content here'
+            error={contentIsInvalid}            
+            helperText={contentIsInvalid?"content cannot be empty":null}
+            value={contents.toString()}
+            onChange={(event) => {setContents(event.target.value)}}
           />
 
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -84,10 +90,24 @@ const ModalEdit = ({
             />
           </LocalizationProvider>
         </Stack>
-
-        <Button variant="contained" onClick={()=>editCurrentTask()}>
-          edit
-        </Button>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            p: 1,
+            m: 1,
+            borderRadius: 0,
+          }}
+        >
+          <Stack spacing={2} direction="row">
+            <Button variant="contained" onClick={() => editCurrentTask()}>
+              confirm
+            </Button>
+            <Button variant="outlined" onClick={() => handleEditClose()}>
+              cancel
+            </Button>
+          </Stack>
+        </Box>
       </Box>
     </Modal>
   );

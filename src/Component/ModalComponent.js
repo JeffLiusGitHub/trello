@@ -29,6 +29,8 @@ const ModalComponent = ({
   setTitle,
   contents,
   setContents,
+  titleIsInvalid,
+  contentIsInvalid
 }) => {
   // console.log({column},{id})
   return (
@@ -39,10 +41,10 @@ const ModalComponent = ({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
+        <Typography id="modal-modal-title" variant="h4" component="h2">
           Set new card
         </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        <Typography id="modal-modal-description" sx={{ mt: 2,mb:'20px' }} >
           please set title content and deadline of the card
         </Typography>
         <Stack spacing={3}>
@@ -51,26 +53,21 @@ const ModalComponent = ({
             label="Title"
             size="normal"
             value={title}
+            error={titleIsInvalid}            
+            helperText={titleIsInvalid?"title cannot be empty":null}
             onChange={(event) => setTitle(event.target.value)}
           />
 
-          {/* <TextField
-            id="outlined-required"
-            label="test"
-            multiline
-            rows={5}
-            size="normal"
-            value={contents}
-            onChange={(event) => setContents(event.target.value)}
-          /> */}
           <TextField
             id="outlined-required"
             label="Content"
             multiline
             rows={5}
             size="normal"
-            // value={contents}
-            onChange={(event) => setContents(event.target.value)}
+            value={contents}
+            error={contentIsInvalid}            
+            helperText={contentIsInvalid?"content cannot be empty":null}
+            onChange={(event) => {setContents(event.target.value)}}
           />
 
           <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -85,9 +82,24 @@ const ModalComponent = ({
           </LocalizationProvider>
         </Stack>
 
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            p: 1,
+            m: 1,
+            borderRadius: 0,
+          }}
+        >
+          <Stack spacing={2} direction="row">
         <Button variant="contained" onClick={()=>addNewTaskToUnSchedule()}>
           confirm
         </Button>
+        <Button variant="outlined" onClick={() => handleClose()}>
+              cancel
+            </Button>
+        </Stack>
+        </Box>
       </Box>
     </Modal>
   );

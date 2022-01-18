@@ -12,10 +12,11 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import user from '../image/avatar.jpg'
-import logo from '../../src/image/logo3.jpg'
+// import logo from '../../src/image/logo3.jpg'
+import logo2 from '../../src/image/logo2.png'
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = [];
+const settings = [];
 
 const Header = ({handleOpen}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -37,15 +38,15 @@ const Header = ({handleOpen}) => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" color="transparent" sx={{ background:"#267ec643"}}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-        <Avatar alt="logo" src={logo}/>
-         
+        <Toolbar disableGutters  variant="regular">
+        <Avatar alt="logo" src={logo2} variant="square" sx={{ width: 70, height: 70 ,margin:'10px',mb:'15px', backgroundColor:'transparent'}}/>
+         {/* <img alt='logo' src={logo2}/> */}
           
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -54,8 +55,8 @@ const Header = ({handleOpen}) => {
               color="inherit"
             >
               <MenuIcon />
-            </IconButton>
-            <Menu
+            </IconButton> */}
+            {/* <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
@@ -73,42 +74,30 @@ const Header = ({handleOpen}) => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+  
               
-            </Menu>
+            </Menu> */}
           </Box>
-          <Typography
+          {/* <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
           >
             LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-              
-            ))}
-            <Button variant="contained" onClick = {handleOpen}>Add new task</Button>
+          </Typography> */}
+          <Box sx={{ flexGrow: 1, justifyContent: "flex-end",display: { md: 'flex' } }}>
+           
+            
+            <Button color='info' sx={{marginRight:'35px'}} variant="contained" onClick = {handleOpen}size='large'>Add new task</Button>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            {/* <Tooltip title="Open settings"> */}
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Jeff" src={user} />
               </IconButton>
-            </Tooltip>
+            {/* </Tooltip> */}
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

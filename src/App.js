@@ -3,31 +3,57 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import formatDate from "./Component/FormatDate";
 import Header from "./Component/Header";
-import Button from "@mui/material/Button";
 import ModalComponent from "./Component/ModalComponent";
 import Card from "./Component/CardComponent";
 import ModalEdit from "./Component/ModalEdit";
-//
-// import { useDispatch } from "react-redux";
-// import { cardActions } from "./store/card-slice";
+import classes from "./App.module.css";
+import SnackbarsComponent from "./Component/SnackbarComponent";
+// import { Typography } from "@mui/material";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: 400,
+//   bgcolor: "background.paper",
+//   border: "2px solid #000",
+//   boxShadow: 24,
+//   p: 4,
+// };
 
 const itemsFromBackend = [
-  { id: uuidv4(), title: "1 task", content: "First task", date: new Date() },
-  { id: uuidv4(), title: "2 task", content: "Second task", date: new Date() },
-  { id: uuidv4(), title: "3 task", content: "third task", date: new Date() },
-  { id: uuidv4(), title: "4 task", content: "fourth task", date: new Date() },
+  {
+    id: uuidv4(),
+    title: "Introduction",
+    content: "This app is based on the react and material UI",
+    date: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: "Manual",
+    content: "User can add, delete and edit new task on the website ",
+    date: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: "Manual",
+    content: "User can set title, content and date on each card",
+    date: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: "Manual",
+    content:
+      "User can also drag and drop the card to the next section if you finish it. Have fun!!!",
+    date: new Date(),
+  },
+  {
+    id: uuidv4(),
+    title: "Hints",
+    content: "Feel free to delete the existing card and add your own one!",
+    date: new Date(),
+  },
 ];
 
 const columnFromBackend = {
@@ -75,44 +101,71 @@ const onDragEnd = (result, columns, setColumns) => {
 
 function App() {
   const [columns, setColumns] = useState(columnFromBackend);
+  const [deleteOpen,setDeleteOpen]= useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [contents, setContents] = useState("");
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [currentId, setCurrentId] = useState();
-  const [index,setIndex] = useState();
-  const[columnId,setColumnId]=useState();
+  const [index, setIndex] = useState();
+  const [columnId, setColumnId] = useState();
   const [currentColumn, setCurrentColumn] = useState({});
   const [date, setDate] = useState(new Date());
+  const [titleIsInvalid, setTitleIsInvalid] = useState(false);
+  const [contentIsInvalid, setContentIsInvalid] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
+    setTitleIsInvalid(false);
+    setContentIsInvalid(false);
   };
   const handleClose = () => {
     setOpen(false);
   };
-  const handleEditOpen = (index,columnId) => {
+  const handleEditOpen = (index, columnId) => {
+    const { [columnId]: columnValue } = columns;
+    const { name, items } = columnValue;
+    const { title, content, date } = items[index];
+    setTitle(title);
+    setContents(content);
+    setDate(date);
     setIndex(index);
     setColumnId(columnId);
     setEditOpen(true);
+    setTitleIsInvalid(false);
+    setContentIsInvalid(false);
   };
   const handleEditClose = () => {
     setEditOpen(false);
   };
-  const editCurrentTask = (index,columnId)=>{
+  const editCurrentTask = (index, columnId) => {
     const { [columnId]: columnValue } = columns;
     const { name, items } = columnValue;
-    items[index]={
-      title: title,
-      content: contents,
-      date: date,
+    const id = items[index].id;
+    if (
+      (title.toString().trim() === "" && contents.toString().trim() === "") ===
+      false
+    ) {
+      items[index] = {
+        id: id,
+        title: title,
+        content: contents,
+        date: date,
+      };
+      let newColumns = { ...columns };
+      newColumns[columnId] = { name: name, items: items };
+      setColumns(newColumns);
+      setTitle("");
+      setContents("");
+      setDate(new Date());
+      handleEditClose();
+    } else {
+      setTitleIsInvalid(title.toString().trim() === "");
+      setContentIsInvalid(contents.toString().trim() === "");
+      return;
     }
-    let newColumns = { ...columns };
-    newColumns[columnId] = { name: name, items: items };
-    setColumns(newColumns);
-    handleEditClose()
-  }
+  };
 
   const deleteCurrentTask = (index, columnId) => {
     const { [columnId]: columnValue } = columns;
@@ -121,53 +174,74 @@ function App() {
     let newColumns = { ...columns };
     newColumns[columnId] = { name: name, items: items };
     setColumns(newColumns);
+    setDeleteOpen(true)
   };
 
   const addNewTaskToUnSchedule = () => {
     let unScheduledId, unScheduledColumn;
     [unScheduledId, unScheduledColumn] = Object.entries(columns)[0];
-    unScheduledColumn.items.push({
-      id: uuidv4(),
-      title: title,
-      content: contents,
-      date: date,
-    });
-    console.log(unScheduledColumn);
-    setColumns({
-      ...columns,
-      [unScheduledId]: {
-        ...unScheduledColumn,
-      },
-    });
-    handleClose()
+    if (
+      (title.toString().trim() === "" && contents.toString().trim() === "") ===
+      false
+    ) {
+      unScheduledColumn.items.push({
+        id: uuidv4(),
+        title: title,
+        content: contents,
+        date: date,
+      });
+      console.log(unScheduledColumn);
+      setColumns({
+        ...columns,
+        [unScheduledId]: {
+          ...unScheduledColumn,
+        },
+      });
+      handleClose();
+      setTitle("");
+      setContents("");
+      setDate(new Date());
+    } else {
+      setTitleIsInvalid(title.toString().trim() === "");
+      setContentIsInvalid(contents.toString().trim() === "");
+      return;
+    }
   };
 
-  // console.log({ title, contents, date });
-  // console.log(columns);
   return (
-    <>
+    <div className={classes.container}>
+      <SnackbarsComponent
+        deleteOpen={deleteOpen}
+        setDeleteOpen={setDeleteOpen}
+        message={'Card already deleted!'}
+        severity={'success'}
+      />
       <ModalComponent
+        titleIsInvalid={titleIsInvalid}
+        contentIsInvalid={contentIsInvalid}
         open={open}
         handleClose={handleClose}
         date={date}
         setDate={setDate}
         title={title}
         setTitle={setTitle}
-        contents={setContents}
+        contents={contents}
         setContents={setContents}
         addNewTaskToUnSchedule={addNewTaskToUnSchedule}
       ></ModalComponent>
 
-<ModalEdit
+      <ModalEdit
         open={editOpen}
-        handleClose={handleEditClose}
+        handleEditClose={handleEditClose}
         date={date}
         setDate={setDate}
         title={title}
         setTitle={setTitle}
-        contents={setContents}
+        contents={contents}
         setContents={setContents}
-        editCurrentTask={()=>editCurrentTask(index,columnId)}
+        titleIsInvalid={titleIsInvalid}
+        contentIsInvalid={contentIsInvalid}
+        editCurrentTask={() => editCurrentTask(index, columnId)}
       ></ModalEdit>
       <Header handleOpen={() => handleOpen()} />
       <div
@@ -185,13 +259,10 @@ function App() {
                   flexDirection: "column",
                 }}
               >
-                <h2>
-                  {column.name}
-
-                  {/* <Button onClick={() => deleteCurrentTask()} variant="contained">
-                    add new task
-                  </Button> */}
-                </h2>
+                <h1>{column.name}</h1>
+                {/* <Typography variant="h2"  fontWeight={700}> 
+                   
+                </Typography> */}
 
                 <div style={{ margin: "8px" }}>
                   <Droppable droppableId={id} key={id}>
@@ -205,11 +276,13 @@ function App() {
                               ? "#1c78c362"
                               : "#39a8db72",
                             padding: 8,
-                            margin: 3,
+                            margin: 5,
                             width: "18vw",
                             minHeight: 500,
-                            height: "50vh",
-                            overflow: "scroll",
+                            height: "62vh",
+                            overflow: "auto",
+                            borderRadius: "8px",
+                            boxShadow: "4px 5px 8px -4px rgba(56,56,56,0.76)",
                           }}
                         >
                           {/* {id} */}
@@ -270,7 +343,7 @@ function App() {
           })}
         </DragDropContext>
       </div>
-    </>
+    </div>
   );
 }
 

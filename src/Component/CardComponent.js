@@ -17,7 +17,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { Stack } from "@mui/material";
+import Box from "@mui/material/Box";
 import { light } from "@mui/material/styles/createPalette";
+import Fab from '@mui/material/Fab';
 import image from "../image/avatar.jpg";
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -52,26 +55,60 @@ const CardComponent = ({
         avatar={<Avatar alt="cool designer Jeff" src={image} />}
         title={title}
         subheader={date}
+        titleTypographyProps={{
+          align: "right",
+          fontSize: "30px",
+          fontWeight: 400,
+        }}
+        subheaderTypographyProps={{
+          align: "right",
+          fontSize: "18px",
+          fontWeight: 200,
+        }}
       />
+
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="h5" color="text.secondary" fontWeight={400}>
           {content}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        <IconButton
-          aria-label="Delete card"
-          onClick={(event) => deleteCurrentTask(index, columnId)}
-        >
-          <DeleteIcon />
-        </IconButton>
-        <IconButton
-          aria-label="Edit"
-          onClick={(event) => handleEditOpen(index, columnId)}
-        >
-          <EditIcon />
-        </IconButton>
-      </CardActions>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          p: 1,
+          m: 1,
+          borderRadius: 0,
+        }}
+      >
+        <Stack spacing={1.6} direction="row">
+          <IconButton
+            aria-label="Delete card"
+            color="primary"
+            size="large"
+            // edge='end'
+            onClick={(event) => deleteCurrentTask(index, columnId)}
+          >
+              <Fab sx={{color:'white',background:' #3587cba1'}}  size="small" aria-label="add">
+                 <DeleteIcon />
+                
+              </Fab>
+           
+          </IconButton>
+          <IconButton
+            aria-label="Edit"
+            color="primary"
+            size="large"
+            // edge='end'
+            onClick={(event) => handleEditOpen(index, columnId)}
+          >
+              <Fab sx={{color:'white',background:'#3d3dedac'}} size="small" aria-label="add">
+                 <EditIcon />
+              </Fab>
+           
+          </IconButton>
+        </Stack>
+      </Box>
     </Card>
   );
 };
