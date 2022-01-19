@@ -19,21 +19,16 @@ const itemsFromBackend = [
   {
     id: uuidv4(),
     title: "Manual",
-    content: "User can add, delete and edit new task on the website ",
-    date: new Date(),
-  },
-  {
-    id: uuidv4(),
-    title: "Manual",
-    content: "User can set title, content and date on each card",
-    date: new Date(),
-  },
-  {
-    id: uuidv4(),
-    title: "Manual",
     content:
-      "User can also drag and drop the card to the next section if you finish it. Have fun!!!",
+      "User can add, delete and edit new task on the website. User can set title, content and date on each card. User can also drag and drop the card to the next section if you finish it. Have fun!!! ",
     date: new Date(),
+  },
+
+  {
+    id: uuidv4(),
+    title: "Deadline",
+    content: "If a card is overdue, a badge will appear on the top left.",
+    date: new Date("2020-1-1"),
   },
   {
     id: uuidv4(),
@@ -73,7 +68,6 @@ const onDragEnd = (result, columns, setColumns) => {
   } else {
     const column = columns[source.droppableId];
     const copiedItems = [...column.items];
-    console.log(copiedItems);
     const [removed] = copiedItems.splice(source.index, 1);
     copiedItems.splice(destination.index, 0, removed);
     setColumns({
@@ -174,7 +168,6 @@ function App() {
         content: contents,
         date: date,
       });
-      console.log(unScheduledColumn);
       setColumns({
         ...columns,
         [unScheduledId]: {
@@ -228,28 +221,26 @@ function App() {
         editCurrentTask={() => editCurrentTask(index, columnId)}
       ></ModalEdit>
       <Header handleOpen={() => handleOpen()} />
-      <div className={classes.column}       
-      >
+      <div className={classes.column}>
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
         >
           {Object.entries(columns).map(([id, column]) => {
             return (
-              <div className={classes.taskContainer}     
-              >
+              <div className={classes.taskContainer}>
                 <h1 className={classes.columnName}>{column.name}</h1>
                 <div style={{ margin: "8px" }}>
                   <Droppable droppableId={id} key={id}>
                     {(provided, snapshot) => {
                       return (
-                        <div className={classes.columnContainer}
+                        <div
+                          className={classes.columnContainer}
                           {...provided.droppableProps}
                           ref={provided.innerRef}
                           style={{
                             background: snapshot.isDraggingOver
                               ? "#c4d2ffa7"
-                              :"#1c78c362" ,
-  
+                              : "#1c78c362",
                           }}
                         >
                           {column.items.map((item, index) => {
@@ -262,19 +253,20 @@ function App() {
                               >
                                 {(provided, snapshot) => {
                                   return (
-                                    <div className={classes.cardContainer}
+                                    <div
+                                      className={classes.cardContainer}
                                       key={item.id}
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
                                       style={{
-
                                         backgroundColor: snapshot.isDragging
                                           ? "#5671c9a3"
-                                          : "#ebf0ffa7",                                 
+                                          : "#ebf0ffa7",
                                         ...provided.draggableProps.style,
                                       }}
                                     >
+                                      {/* <div style={{backgroundColor:Date.parse(formatDate(item.date))>Date.parse(new Date())?'black':'red'}}> */}
                                       <Card
                                         title={item.title}
                                         date={formatDate(item.date)}
@@ -285,6 +277,7 @@ function App() {
                                         deleteCurrentTask={deleteCurrentTask}
                                         handleEditOpen={handleEditOpen}
                                       />
+                                      {/* </div> */}
                                     </div>
                                   );
                                 }}
