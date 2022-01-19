@@ -52,7 +52,7 @@ const ModalEdit = ({
         <Stack spacing={3}>
           <TextField
             id="outlined-required"
-            required='true'
+            required={true}
             label="Title"
             size="normal"
             error={titleIsInvalid}            
@@ -63,7 +63,7 @@ const ModalEdit = ({
 
           <TextField
             id="outlined-required"
-            required='true'
+            required={true}
             label="Content"
             multiline
             rows={5}

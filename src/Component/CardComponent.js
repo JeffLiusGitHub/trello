@@ -40,10 +40,10 @@ const CardComponent = ({
   handleEditOpen,
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const [invisible, setInvisible] = useState(true);
+  const [invisible, setInvisible] = useState(null);
   useEffect(() => {
     setInvisible(Date.parse(date) < Date.parse(formatDate(new Date())));
-  },[date]);
+  }, [date]);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -52,17 +52,15 @@ const CardComponent = ({
   return (
     <Card sx={{ maxWidth: 500 }}>
       <CardHeader
-        // avatar={ <Badge color="error" variant="dot"invisible={!invisible}>
-        //     <Avatar alt="cool designer Jeff" src={image} overlap="circular"/>
-        //     </Badge>
-        //     }
         avatar={
           <Badge
             color="error"
             variant="standard"
             invisible={!invisible}
-            sx={{height:'5px',width:'5px'}}
-            badgeContent={<CalendarTodayIcon sx={{height:'15px',width:'10px'}}/>}
+            sx={{ height: "5px", width: "5px" }}
+            badgeContent={
+              <CalendarTodayIcon sx={{ height: "15px", width: "10px" }} />
+            }
           >
             <Avatar alt="Jeff, cool designer" src={image} overlap="circular" />
           </Badge>
@@ -90,44 +88,35 @@ const CardComponent = ({
         }}
       >
         <Stack spacing={{ md: -1.5, lg: 1.6 }} direction="row">
-          <IconButton
+          <Fab
+            sx={{
+              color: "white",
+              background: " #3587cba1",
+              height: { md: "8px", lg: "40px" },
+              width: { md: "34px", lg: "40px" },
+            }}
             aria-label="Delete card"
             color="primary"
             size="medium"
             onClick={(event) => deleteCurrentTask(index, columnId)}
           >
-            <Fab
-              sx={{
-                color: "white",
-                background: " #3587cba1",
-                height: { md: "8px", lg: "40px" },
-                width: { md: "34px", lg: "40px" },
-              }}
-              size="small"
-              aria-label="add"
-            >
-              <DeleteIcon />
-            </Fab>
-          </IconButton>
-          <IconButton
+            <DeleteIcon />
+          </Fab>
+
+          <Fab
+            sx={{
+              color: "white",
+              background: "#3d3dedac",
+              height: { md: "8px", lg: "40px" },
+              width: { md: "34px", lg: "40px" },
+            }}
             aria-label="Edit"
             color="primary"
             size="medium"
             onClick={(event) => handleEditOpen(index, columnId)}
           >
-            <Fab
-              sx={{
-                color: "white",
-                background: "#3d3dedac",
-                height: { md: "8px", lg: "40px" },
-                width: { md: "34px", lg: "40px" },
-              }}
-              size="small"
-              aria-label="add"
-            >
-              <EditIcon />
-            </Fab>
-          </IconButton>
+            <EditIcon />
+          </Fab>
         </Stack>
         <ExpandMore
           expand={expanded}

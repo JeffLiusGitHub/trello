@@ -234,6 +234,7 @@ function App() {
                     {(provided, snapshot) => {
                       return (
                         <div
+                          key={id}
                           className={classes.columnContainer}
                           {...provided.droppableProps}
                           ref={provided.innerRef}
@@ -266,8 +267,8 @@ function App() {
                                         ...provided.draggableProps.style,
                                       }}
                                     >
-                                      {/* <div style={{backgroundColor:Date.parse(formatDate(item.date))>Date.parse(new Date())?'black':'red'}}> */}
                                       <Card
+                                        key={item.id}
                                         title={item.title}
                                         date={formatDate(item.date)}
                                         content={item.content}
