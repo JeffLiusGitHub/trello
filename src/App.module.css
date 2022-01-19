@@ -1,20 +1,114 @@
-.container{
-
-   
-    height:100vh;
-
- overflow: hidden;
+.container {
+  height: 100vh;
+  overflow: hidden;
 }
-.container::before{
-    content:'';
-    background-image:url('./image/164424.png');
-    background-size: 100% 100%;
-    position:absolute;
-    top:0;
-    left:0;
-    width:100vw;
-    height:100vh;
-    -webkit-filter: blur(20px) grayscale(10%) opacity(80%)brightness(95%);
-    filter:blur(14px) grayscale(10%) opacity(80%)brightness(95%)saturate(85%);
-    z-index:-1;
+.container::before {
+  content: "";
+  background-image: url("./image/164424.png");
+  background-size: 100% 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  -webkit-filter: blur(20px) grayscale(10%) opacity(80%) brightness(95%);
+  filter: blur(14px) grayscale(10%) opacity(80%) brightness(95%) saturate(85%);
+  z-index: -1;
+}
+@media (min-width: 320px) and (max-width: 480px) {
+  .container::before {
+    filter: blur(14px) grayscale(10%) opacity(80%) brightness(95%) saturate(55%);
+  }
+}
+.column {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+@media (max-width: 480px) {
+  .column {
+    display: block;
+    overflow: visible;
+    height: 50%;
+  }
+}
+
+.taskContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  /* margin-top: -130px; */
+}
+
+@media (max-width: 1024px) {
+  .taskContainer {
+    margin-top: -130px;
+  }
+}
+
+.columnName {
+  font-size: 25px;
+}
+@media (max-width: 1024px) {
+  .columnName {
+    margin-top: -10px;
+  }
+}
+@media (max-width: 768px) {
+  .columnName {
+    font-size: 15px;
+    margin-top: 130px;
+  }
+}
+@media (max-width: 480px) {
+  .columnName {
+    font-size: 20px;
+    margin-top: 135px;
+  }
+}
+.columnContainer {
+  padding: 8px;
+  margin: 5px;
+  width: 18vw;
+  min-height: 60vh;
+  height: 62vh;
+  overflow: auto;
+  border-radius: 8px;
+  box-shadow: 4px 5px 8px -4px rgba(56, 56, 56, 0.76);
+}
+@media (max-width: 1440px) {
+  .columnContainer {
+    width: 20vw;
+  }
+}
+@media (max-width: 1024px) {
+  .columnContainer {
+    padding: 0px;
+    margin: 0px;
+    width: 23vw;
+    margin-top: -15px;
+  }
+}
+@media (max-width: 768px) {
+  .columnContainer {
+    padding: 0px;
+    margin: 0px;
+    width: 22vw;
+  }
+}
+@media (max-width: 480px) {
+  .columnContainer {
+    width: 100vw;
+    margin-left: -8px;
+    /* margin-top:120px; */
+    min-height: 20px;
+  }
+}
+.cardContainer {
+  user-select: none;
+  padding: 8px;
+  margin: 0 0 4px 0;
+  min-height: 50px;
+  color: whitesmoke;
+  border-radius: 12px;
 }

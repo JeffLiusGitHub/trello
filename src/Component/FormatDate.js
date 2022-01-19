@@ -1,4 +1,3 @@
-
 import { format, utcToZonedTime } from "date-fns-tz";
 
 const formatDate = (date) => {

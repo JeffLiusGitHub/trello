@@ -1,4 +1,3 @@
-import {useState} from 'react'
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -14,7 +13,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  
+  width: {xs:"80%",md:400},
   bgcolor: "background.paper",
   border: "2px solid rgba(61, 61, 237, 0.249)",
   boxShadow: 24,
@@ -33,9 +33,7 @@ const ModalEdit = ({
   setContents,
    titleIsInvalid,
   contentIsInvalid,
- 
 }) => {
-
 
   return (
     <Modal
@@ -58,12 +56,10 @@ const ModalEdit = ({
             label="Title"
             size="normal"
             error={titleIsInvalid}            
-            helperText={titleIsInvalid?"title cannot be empty":null}
-            
+            helperText={titleIsInvalid?"title cannot be empty":null}           
             value={title}
             onChange={(event) => setTitle(event.target.value)}
           />
-
 
           <TextField
             id="outlined-required"

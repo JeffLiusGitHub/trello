@@ -1,0 +1,25 @@
+[debug] [2022-01-19T01:13:13.104Z] ----------------------------------------------------------------------
+[debug] [2022-01-19T01:13:13.105Z] Command:       /usr/local/bin/node /usr/local/bin/firebase init
+[debug] [2022-01-19T01:13:13.105Z] CLI Version:   9.16.5
+[debug] [2022-01-19T01:13:13.105Z] Platform:      darwin
+[debug] [2022-01-19T01:13:13.105Z] Node Version:  v14.18.1
+[debug] [2022-01-19T01:13:13.106Z] Time:          Wed Jan 19 2022 12:13:13 GMT+1100 (Australian Eastern Daylight Time)
+[debug] [2022-01-19T01:13:13.107Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-01-19T01:13:13.154Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-01-19T01:13:13.154Z] > authorizing via signed-in user (liuzexijeff@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/jeff/Desktop/react-trello/trello
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+

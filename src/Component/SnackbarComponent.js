@@ -1,9 +1,7 @@
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
-
 const SnackbarsComponent = ({deleteOpen,setDeleteOpen,message,severity}) => {
-
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -26,5 +24,4 @@ const SnackbarsComponent = ({deleteOpen,setDeleteOpen,message,severity}) => {
     </Snackbar>
   );
 };
-
 export default SnackbarsComponent;

@@ -8,19 +8,6 @@ import Card from "./Component/CardComponent";
 import ModalEdit from "./Component/ModalEdit";
 import classes from "./App.module.css";
 import SnackbarsComponent from "./Component/SnackbarComponent";
-// import { Typography } from "@mui/material";
-
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: 400,
-//   bgcolor: "background.paper",
-//   border: "2px solid #000",
-//   boxShadow: 24,
-//   p: 4,
-// };
 
 const itemsFromBackend = [
   {
@@ -101,16 +88,13 @@ const onDragEnd = (result, columns, setColumns) => {
 
 function App() {
   const [columns, setColumns] = useState(columnFromBackend);
-  const [deleteOpen,setDeleteOpen]= useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
   const [contents, setContents] = useState("");
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [currentId, setCurrentId] = useState();
   const [index, setIndex] = useState();
   const [columnId, setColumnId] = useState();
-  const [currentColumn, setCurrentColumn] = useState({});
   const [date, setDate] = useState(new Date());
   const [titleIsInvalid, setTitleIsInvalid] = useState(false);
   const [contentIsInvalid, setContentIsInvalid] = useState(false);
@@ -125,7 +109,7 @@ function App() {
   };
   const handleEditOpen = (index, columnId) => {
     const { [columnId]: columnValue } = columns;
-    const { name, items } = columnValue;
+    const { items } = columnValue;
     const { title, content, date } = items[index];
     setTitle(title);
     setContents(content);
@@ -174,7 +158,7 @@ function App() {
     let newColumns = { ...columns };
     newColumns[columnId] = { name: name, items: items };
     setColumns(newColumns);
-    setDeleteOpen(true)
+    setDeleteOpen(true);
   };
 
   const addNewTaskToUnSchedule = () => {
@@ -213,8 +197,8 @@ function App() {
       <SnackbarsComponent
         deleteOpen={deleteOpen}
         setDeleteOpen={setDeleteOpen}
-        message={'Card already deleted!'}
-        severity={'success'}
+        message={"Card already deleted!"}
+        severity={"success"}
       />
       <ModalComponent
         titleIsInvalid={titleIsInvalid}
@@ -244,48 +228,30 @@ function App() {
         editCurrentTask={() => editCurrentTask(index, columnId)}
       ></ModalEdit>
       <Header handleOpen={() => handleOpen()} />
-      <div
-        style={{ display: "flex", justifyContent: "center", height: "100%" }}
+      <div className={classes.column}       
       >
         <DragDropContext
           onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
         >
           {Object.entries(columns).map(([id, column]) => {
             return (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  flexDirection: "column",
-                }}
+              <div className={classes.taskContainer}     
               >
-                <h1>{column.name}</h1>
-                {/* <Typography variant="h2"  fontWeight={700}> 
-                   
-                </Typography> */}
-
+                <h1 className={classes.columnName}>{column.name}</h1>
                 <div style={{ margin: "8px" }}>
                   <Droppable droppableId={id} key={id}>
                     {(provided, snapshot) => {
                       return (
-                        <div
+                        <div className={classes.columnContainer}
                           {...provided.droppableProps}
                           ref={provided.innerRef}
                           style={{
                             background: snapshot.isDraggingOver
-                              ? "#1c78c362"
-                              : "#39a8db72",
-                            padding: 8,
-                            margin: 5,
-                            width: "18vw",
-                            minHeight: 500,
-                            height: "62vh",
-                            overflow: "auto",
-                            borderRadius: "8px",
-                            boxShadow: "4px 5px 8px -4px rgba(56,56,56,0.76)",
+                              ? "#c4d2ffa7"
+                              :"#1c78c362" ,
+  
                           }}
                         >
-                          {/* {id} */}
                           {column.items.map((item, index) => {
                             return (
                               <Draggable
@@ -296,20 +262,16 @@ function App() {
                               >
                                 {(provided, snapshot) => {
                                   return (
-                                    <div
+                                    <div className={classes.cardContainer}
                                       key={item.id}
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
                                       style={{
-                                        userSelect: "none",
-                                        padding: 8,
-                                        margin: "0 0 4px 0",
-                                        minHeight: "50px",
+
                                         backgroundColor: snapshot.isDragging
-                                          ? "#ac8cb133"
-                                          : "#a9a9a933",
-                                        color: "white",
+                                          ? "#5671c9a3"
+                                          : "#ebf0ffa7",                                 
                                         ...provided.draggableProps.style,
                                       }}
                                     >
@@ -323,9 +285,6 @@ function App() {
                                         deleteCurrentTask={deleteCurrentTask}
                                         handleEditOpen={handleEditOpen}
                                       />
-                                      {/* Title: {item.title}
-                                      <p> Content: {item.content}</p>
-                                      <p>Deadline: {formatDate(item.date)}</p> */}
                                     </div>
                                   );
                                 }}
