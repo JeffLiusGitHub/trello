@@ -50,7 +50,7 @@ const CardComponent = ({
   };
 
   return (
-    <Card sx={{ maxWidth: 500 }}>
+    <Card sx={{ maxWidth: 800 }}>
       <CardHeader
         avatar={
           <Badge
@@ -69,12 +69,12 @@ const CardComponent = ({
         subheader={date}
         titleTypographyProps={{
           align: "right",
-          fontSize: { sm: "30px", md: "16px", lg: "30px" },
+          fontSize: { xs:"30px",sm: "13px", md: "16px", lg: "30px" },
           fontWeight: 400,
         }}
         subheaderTypographyProps={{
           align: "right",
-          fontSize: { sm: "30px", md: "9px", lg: "18px" },
+          fontSize: { xs:'20px',sm: "8px", md: "9px", lg: "18px" },
           fontWeight: 200,
         }}
       />
@@ -83,17 +83,21 @@ const CardComponent = ({
           display: "flex",
           justifyContent: "flex-end",
           p: 0.5,
-          m: 0.5,
+          
+          mt:{xs:2.5,sm:3,md:1,lg:1},
+          mr:2,
+          mb:2,
+          ml:1,
           borderRadius: 0,
         }}
       >
-        <Stack spacing={{ md: -1.5, lg: 1.6 }} direction="row">
+        <Stack spacing={{xs:3,sm:0.3, md: 0.7, lg: 1.6 }} direction="row">
           <Fab
             sx={{
               color: "white",
               background: " #3587cba1",
-              height: { md: "8px", lg: "40px" },
-              width: { md: "34px", lg: "40px" },
+              height: { xs:'3px',md: "8px", lg: "40px" },
+              width: { xs:'36px',md: "34px", lg: "40px" },
             }}
             aria-label="Delete card"
             color="primary"
@@ -107,8 +111,10 @@ const CardComponent = ({
             sx={{
               color: "white",
               background: "#3d3dedac",
-              height: { md: "8px", lg: "40px" },
-              width: { md: "34px", lg: "40px" },
+              // margin:'4px',
+              // marginBotton:'10px',
+              height: { xs:'3px', md: "8px", lg: "40px" },
+              width: { xs:'36px',md: "34px", lg: "40px" },
             }}
             aria-label="Edit"
             color="primary"
@@ -139,11 +145,14 @@ const CardComponent = ({
           <Typography
             variant="h5"
             sx={{
-              fontSize: { md: "15px" },
+              fontFamily:"sans-serif",
+              fontSize: { md: "20px",sm:"15px",xs:'18px'},
+              fontWeight:300,
               tableLayout: "fixed",
               wordWrap: "break-word",
               textAlign: "justify",
               textJustify: "inter-ideograph",
+              textIndent:'50px'
             }}
             color="text.secondary"
             fontWeight={400}
