@@ -33,7 +33,6 @@ const CardComponent = ({
   title,
   content,
   date,
-  id,
   index,
   columnId,
   deleteCurrentTask,
@@ -42,8 +41,12 @@ const CardComponent = ({
   const [expanded, setExpanded] = useState(false);
   const [invisible, setInvisible] = useState(null);
   useEffect(() => {
-    setInvisible(Date.parse(date) < Date.parse(formatDate(new Date())));
+    setInvisible(Date.parse(formatDate(date)) < Date.parse(formatDate(new Date())));
+    // console.log(date)
+    // console.log(formatDate(date))
+    //  console.log(Date.parse(date) < Date.parse(formatDate(new Date())))
   }, [date]);
+ 
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -66,7 +69,7 @@ const CardComponent = ({
           </Badge>
         }
         title={title}
-        subheader={date}
+        subheader={formatDate(date)}
         titleTypographyProps={{
           align: "right",
           fontSize: { xs:"30px",sm: "13px", md: "16px", lg: "30px" },

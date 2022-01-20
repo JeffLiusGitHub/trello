@@ -28,7 +28,7 @@ const itemsFromBackend = [
     id: uuidv4(),
     title: "Deadline",
     content: "If a card is overdue, a badge will appear on the top left.",
-    date: new Date("2020-1-1"),
+    date: new Date(1577797200000),
   },
   {
     id: uuidv4(),
@@ -270,7 +270,7 @@ function App() {
                                       <Card
                                         key={item.id}
                                         title={item.title}
-                                        date={formatDate(item.date)}
+                                        date={Date.parse(item.date)}
                                         content={item.content}
                                         id={item.id}
                                         index={index}
